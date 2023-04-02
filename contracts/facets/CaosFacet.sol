@@ -13,11 +13,14 @@ contract CaosFacet {
         uint256 lastPaidDate;
     }
 
+    // State variables
+    address public owner;
     mapping(address => Employee) private employees;
     mapping(address => uint) private payments;
     address[] private employeeAddresses;
     mapping(string => uint) public rates;
 
+    // Events
     event EmployeeRegistered(
         string name,
         string hireDate,
@@ -25,27 +28,25 @@ contract CaosFacet {
         string position,
         address indexed employeeAddress
     );
-
     event PaymentProcessed(
         address indexed employeeAddress,
         uint256 amount,
         uint256 timestamp
     );
 
-    address public owner;
-
+    // Constructor
     constructor() {
         owner = msg.sender;
     }
 
+    // Modifiers
     modifier onlyOwner() {
         require(
             msg.sender == owner,
             "Only the contract owner can call this function."
         );
-        _; // Continues execution if the modifier code above passed
+        _;
     }
-
     modifier isEmployee(address employeeAddress) {
         require(
             bytes(employees[employeeAddress].name).length != 0,
@@ -54,6 +55,7 @@ contract CaosFacet {
         _;
     }
 
+    // Public functions
     function registerEmployee(
         string memory name,
         string memory hireDate,
@@ -136,10 +138,6 @@ contract CaosFacet {
         address employeeAddress
     ) public view isEmployee(employeeAddress) returns (uint256) {
         return payments[employeeAddress];
-    }
-
-    function logTransaction() public {
-        // log payment transaction
     }
 
     function addRate(string memory position, uint rate) public onlyOwner {
