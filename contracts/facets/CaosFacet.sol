@@ -2,37 +2,15 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-contract CaosFacet {
-    struct Employee {
-        string name;
-        string hireDate;
-        uint salary;
-        string position;
-        uint totalHoursWorked;
-        address employeeAddress;
-        uint256 lastPaidDate;
-    }
+import "../interfaces/ICaos.sol";
 
+contract CaosFacet is ICaos {
     // State variables
     address public owner;
     mapping(address => Employee) private employees;
     mapping(address => uint) private payments;
     address[] private employeeAddresses;
     mapping(string => uint) public rates;
-
-    // Events
-    event EmployeeRegistered(
-        string name,
-        string hireDate,
-        uint256 salary,
-        string position,
-        address indexed employeeAddress
-    );
-    event PaymentProcessed(
-        address indexed employeeAddress,
-        uint256 amount,
-        uint256 timestamp
-    );
 
     // Constructor
     constructor() {
