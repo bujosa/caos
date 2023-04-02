@@ -3,20 +3,6 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 interface ICaos {
-    // Events
-    event EmployeeRegistered(
-        string name,
-        string hireDate,
-        uint256 salary,
-        string position,
-        address indexed employeeAddress
-    );
-    event PaymentProcessed(
-        address indexed employeeAddress,
-        uint256 amount,
-        uint256 timestamp
-    );
-
     /**
      * @dev This function is used to register a new employee
      */

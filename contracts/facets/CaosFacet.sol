@@ -3,6 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "../interfaces/ICaos.sol";
+import "../libraries/Events.sol";
 
 contract CaosFacet is ICaos {
     // State variables
@@ -59,7 +60,7 @@ contract CaosFacet is ICaos {
             lastPaidDate: block.timestamp
         });
 
-        emit EmployeeRegistered(
+        emit Events.EmployeeRegistered(
             name,
             hireDate,
             salary,
@@ -108,7 +109,11 @@ contract CaosFacet is ICaos {
         payable(employeeAddress).transfer(paymentAmount);
         employees[employeeAddress].totalHoursWorked = 0;
         payments[employeeAddress] += paymentAmount;
-        emit PaymentProcessed(employeeAddress, paymentAmount, block.timestamp);
+        emit Events.PaymentProcessed(
+            employeeAddress,
+            paymentAmount,
+            block.timestamp
+        );
     }
 
     // get payment
