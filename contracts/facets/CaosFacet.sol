@@ -23,6 +23,8 @@ contract CaosFacet {
         address indexed employeeAddress
     );
 
+    event PaymentProcessed(address indexed employeeAddress, uint256 amount);
+
     address public owner;
 
     constructor() {
