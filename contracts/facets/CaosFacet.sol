@@ -78,10 +78,17 @@ contract CaosFacet {
         }
     }
 
-    function processPayment() public {
+    function processPayment() public payable {
         require(payments[msg.sender] > 0, "No payment due.");
-        // process payment using cryptocurrency or traditional currency
+        require(msg.value == payments[msg.sender], "Incorrect payment amount.");
+
+        // Transfer Ether to employee
+        (bool success, ) = payable(msg.sender).call{value: msg.value}("");
+        require(success, "Payment failed.");
+
         payments[msg.sender] = 0;
+
+        emit PaymentProcessed(msg.sender, msg.value);
     }
 
     function logTransaction() public {
