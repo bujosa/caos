@@ -33,7 +33,9 @@ contract CaosFacet {
         _;
     }
 
-    // Public functions
+    /**
+     * @dev This function is used to add new employee.
+     */
     function registerEmployee(
         string memory name,
         string memory hireDate,
@@ -68,6 +70,11 @@ contract CaosFacet {
         );
     }
 
+    /**
+     * @dev This function is used to get an employee.
+     * @param employeeAddress The address of the employee.
+     * @return employee The employee object.
+     */
     function getEmployee(
         address employeeAddress
     )
@@ -80,12 +87,18 @@ contract CaosFacet {
         return employees[employeeAddress];
     }
 
-    // This function is used to log hours worked by an employee
+    /**
+     * @dev This function is used to log hours for an employee.
+     * @param _hours The number of hours worked.
+     */
     function logHours(uint _hours) public isEmployee(msg.sender) {
         employees[msg.sender].totalHoursWorked += _hours;
     }
 
-    // This function is used to pay an employee
+    /**
+     * @dev This function is used for the owner of the contract to process a payment for an employee.
+     * @param employeeAddress The address of the employee.
+     */
     function processPayment(
         address employeeAddress
     ) public onlyOwner isEmployee(employeeAddress) {
@@ -103,24 +116,43 @@ contract CaosFacet {
         );
     }
 
-    // get payment
+    /**
+     * @dev This function is used to get the payment amount for an employee.
+     * @param employeeAddress The address of the employee.
+     * @return The payment amount for the employee.
+     */
     function getPayment(
         address employeeAddress
     ) public view isEmployee(employeeAddress) returns (uint256) {
         return payments[employeeAddress];
     }
 
+    /**
+     * @dev This function is used to add a new rate for a position.
+     * @param position The position of the employee.
+     * @param rate The rate for the position.
+     */
     function addRate(string memory position, uint rate) public onlyOwner {
         rates[position] = rate;
     }
 
+    /**
+     * @dev This function is used to get the rate for a position.
+     * @param position The position of the employee.
+     * @return The rate for the position.
+     */
     function getRate(string memory position) public view returns (uint) {
         return rates[position];
     }
 
+    /**
+     * @dev This function is used to calculate the payment for an employee.
+     * @param employee The employee object.
+     * @return The total payment for the employee.
+     */
     function calculatePayment(
         Employee memory employee
-    ) public view isEmployee(employee.employeeAddress) returns (uint256) {
+    ) internal view isEmployee(employee.employeeAddress) returns (uint256) {
         uint256 hourlyRate = rates[employee.position];
         uint256 totalPayment = hourlyRate * employee.totalHoursWorked;
 
