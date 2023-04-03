@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
+import "../lib/forge-std/src/Test.sol";
 import "../contracts/facets/CaosFacet.sol";
-import "@contracts/libraries/Errors.sol";
+import "../contracts/libraries/Errors.sol";
 
 contract CaosTest is Test {
     CaosFacet caos;
