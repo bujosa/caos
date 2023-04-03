@@ -32,6 +32,12 @@ contract CaosTest is Test {
         assertEq(rate, 20);
     }
 
+    function testExpectRevertAddRate() public {
+        vm.prank(employee1);
+        vm.expectRevert(abi.encodeWithSelector(Errors.OnlyOwner.selector));
+        caos.addRate("Manager", 20);
+    }
+
     // Test for LogHours Method
     function testLogHours() public {
         vm.prank(employee1);
