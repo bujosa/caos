@@ -1,37 +1,55 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.7.0 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 import "../contracts/facets/CaosFacet.sol";
+import "@contracts/libraries/Errors.sol";
 
 contract CaosTest is Test {
-    CaosFacet public caos;
+    CaosFacet caos;
+    address owner;
+    address employee1;
 
     function setUp() public {
         caos = new CaosFacet();
-    }
-
-    function testRegisterEmployee() public {
-        caos.registerEmployee("Alice", "2022-01-01", 10000, "Manager");
-        (string memory name, string memory position) = caos.getEmployee(
-            "Alice"
+        owner = msg.sender;
+        employee1 = address(0x123);
+        caos.addRate("Manager", 30);
+        caos.registerEmployee(
+            "John Doe",
+            "2021-01-01",
+            1000,
+            "Manager",
+            employee1,
+            0
         );
-        assertEq(name, "Alice");
-        assertEq(position, "Manager");
     }
 
-    function testLogHoursWorked() public {
-        caos.registerEmployee("Alice", "2022-01-01", "10000", "Manager");
-        caos.logHoursWorked("Alice", "100");
-        uint256 hoursWorked = caos.getHoursWorked("Alice");
+    // Test for AddRate method
+    function testAddRate() public {
+        caos.addRate("Test", 20);
+        uint rate = caos.getRate("Test");
+        assertEq(rate, 20);
+    }
+
+    // Test for LogHours Method
+    function testLogHours() public {
+        vm.prank(employee1);
+        caos.logHours(100);
+
+        uint hoursWorked = caos.getEmployee(employee1).totalHoursWorked;
         assertEq(hoursWorked, 100);
     }
 
-    function testProcessPayment() public {
-        caos.registerEmployee("Alice", "2022-01-01", "10000", "Manager");
-        caos.logHoursWorked("Alice", "100");
-        caos.processPayment();
-        uint256 balance = address(caos).balance;
-        assertEq(balance, 10000);
+    function testExpectRevertLogHours() public {
+        address expectedAddress = address(0x1234);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Errors.InvalidEmployee.selector,
+                expectedAddress
+            )
+        );
+        vm.prank(expectedAddress);
+        caos.logHours(100);
     }
 }
