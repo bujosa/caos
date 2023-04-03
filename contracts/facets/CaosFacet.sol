@@ -123,8 +123,12 @@ contract CaosFacet is ICaos {
         return payments[employeeAddress];
     }
 
-    function addRate(string memory position, uint rate) public onlyOwner {
+    function addRate(string memory position, uint rate) public {
         rates[position] = rate;
+    }
+
+    function getRate(string memory position) public view returns (uint) {
+        return rates[position];
     }
 
     function calculatePayment(
