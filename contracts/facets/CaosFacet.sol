@@ -4,6 +4,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 import "../interfaces/ICaos.sol";
 import "../libraries/Events.sol";
+import "../libraries/Errors.sol";
 
 contract CaosFacet {
     // State variabless
@@ -20,17 +21,15 @@ contract CaosFacet {
 
     // Modifiers
     modifier onlyOwner() {
-        require(
-            msg.sender == owner,
-            "Only the contract owner can call this function."
-        );
+        if (msg.sender != owner) {
+            revert Errors.OnlyOwner();
+        }
         _;
     }
     modifier isEmployee(address employeeAddress) {
-        require(
-            bytes(employees[employeeAddress].name).length != 0,
-            "Not a registered employee."
-        );
+        if (bytes(employees[employeeAddress].name).length == 0) {
+            revert Errors.InvalidEmployee(employeeAddress);
+        }
         _;
     }
 
@@ -75,22 +74,10 @@ contract CaosFacet {
         public
         view
         isEmployee(employeeAddress)
-        returns (
-            string memory name,
-            string memory hireDate,
-            uint256 salary,
-            string memory position,
-            uint256 totalHoursWorked,
-            uint256 lastPaidDate
-        )
+        onlyOwner
+        returns (Employee memory employee)
     {
-        Employee storage employee = employees[employeeAddress];
-        name = employee.name;
-        hireDate = employee.hireDate;
-        salary = employee.salary;
-        position = employee.position;
-        totalHoursWorked = employee.totalHoursWorked;
-        lastPaidDate = employee.lastPaidDate;
+        return employees[employeeAddress];
     }
 
     // This function is used to log hours worked by an employee
