@@ -5,8 +5,8 @@ pragma solidity >=0.7.0 <0.9.0;
 import "../interfaces/ICaos.sol";
 import "../libraries/Events.sol";
 
-contract CaosFacet is ICaos {
-    // State variables
+contract CaosFacet {
+    // State variabless
     address public owner;
     mapping(address => Employee) private employees;
     mapping(address => uint) private payments;
@@ -123,7 +123,7 @@ contract CaosFacet is ICaos {
         return payments[employeeAddress];
     }
 
-    function addRate(string memory position, uint rate) public {
+    function addRate(string memory position, uint rate) public onlyOwner {
         rates[position] = rate;
     }
 
