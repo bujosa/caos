@@ -123,7 +123,7 @@ contract CaosFacet {
      */
     function getPayment(
         address employeeAddress
-    ) public view isEmployee(employeeAddress) returns (uint256) {
+    ) public view isEmployee(employeeAddress) onlyOwner returns (uint256) {
         return payments[employeeAddress];
     }
 
@@ -142,6 +142,9 @@ contract CaosFacet {
      * @return The rate for the position.
      */
     function getRate(string memory position) public view returns (uint) {
+        if (rates[position] == 0) {
+            revert Errors.InvalidPosition(position);
+        }
         return rates[position];
     }
 
