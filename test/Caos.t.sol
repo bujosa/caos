@@ -13,7 +13,12 @@ contract CaosTest is Test {
     function setUp() public {
         caos = new CaosFacet();
         owner = msg.sender;
+
         employee1 = address(0x123);
+
+        uint256 amount = 10000000000000000000000 ether;
+        payable(address(this)).send(amount);
+
         caos.addRate("Manager", 30);
         caos.registerEmployee(
             "John Doe",
@@ -102,7 +107,7 @@ contract CaosTest is Test {
     function testGetPayment() public {
         vm.prank(employee1);
         caos.logHours(100);
-
+        vm.deal(address(caos), 100000 ether);
         caos.processPayment(employee1);
         uint payment = caos.getPayment(employee1);
         assertEq(payment, 3000);
