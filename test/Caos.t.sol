@@ -58,4 +58,53 @@ contract CaosTest is Test {
         vm.prank(expectedAddress);
         caos.logHours(100);
     }
+
+    // Test getEmployee method
+    function testGetEmployee() public {
+        Employee memory employee = caos.getEmployee(employee1);
+        assertEq(employee.name, "John Doe");
+        assertEq(employee.hireDate, "2021-01-01");
+        assertEq(employee.salary, 1000);
+        assertEq(employee.position, "Manager");
+        assertEq(employee.totalHoursWorked, 0);
+        assertEq(employee.employeeAddress, employee1);
+    }
+
+    function testExpectRevertGetEmployee() public {
+        address expectedAddress = address(0x1234);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Errors.InvalidEmployee.selector,
+                expectedAddress
+            )
+        );
+        caos.getEmployee(expectedAddress);
+    }
+
+    // Test getRate method
+    function testGetRate() public {
+        uint rate = caos.getRate("Manager");
+        assertEq(rate, 30);
+    }
+
+    function testExpectRevertGetRate() public {
+        string memory expectedPosition = "Test2";
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Errors.InvalidPosition.selector,
+                expectedPosition
+            )
+        );
+        caos.getRate(expectedPosition);
+    }
+
+    // Test getPayment method
+    function testGetPayment() public {
+        vm.prank(employee1);
+        caos.logHours(100);
+
+        caos.processPayment(employee1);
+        uint payment = caos.getPayment(employee1);
+        assertEq(payment, 3000);
+    }
 }
