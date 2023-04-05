@@ -49,6 +49,10 @@ contract CaosFacet {
             "Caos: employee address cannot be zero"
         );
 
+        if (bytes(employees[employeeAddress].name).length != 0) {
+            revert Errors.EmployeeAlreadyExist(employeeAddress);
+        }
+
         require(rates[position] > 0, "Rate for position does not exist.");
 
         employees[employeeAddress] = Employee({
@@ -68,6 +72,23 @@ contract CaosFacet {
             position,
             employeeAddress
         );
+    }
+
+    /**
+     * @dev This function is used to remove an employee.
+     */
+    function removeEmployee(address employeeAddress) public onlyOwner {
+        require(
+            employeeAddress != address(0),
+            "Caos: employee address cannot be zero"
+        );
+
+        if (bytes(employees[employeeAddress].name).length == 0) {
+            revert Errors.InvalidEmployee(employeeAddress);
+        }
+
+        delete employees[employeeAddress];
+        emit Events.RemoveEmployee(employeeAddress, block.timestamp);
     }
 
     /**
