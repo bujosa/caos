@@ -11,7 +11,6 @@ contract CaosFacet {
     address public owner;
     mapping(address => Employee) private employees;
     mapping(address => uint) private payments;
-    address[] private employeeAddresses;
     mapping(string => uint) public rates;
 
     // Constructor
