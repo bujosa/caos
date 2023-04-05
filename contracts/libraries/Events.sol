@@ -21,4 +21,9 @@ library Events {
         uint256 amount,
         uint256 timestamp
     );
+
+    /**
+     * @dev Emitted when the owner of the contract removes an employee from the system.
+     */
+    event RemoveEmployee(address indexed employeeAddress, uint256 timestamp);
 }
