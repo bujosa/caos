@@ -16,6 +16,11 @@ interface ICaos {
     ) external;
 
     /**
+     * @dev This function is used to remove an employee
+     */
+    function removeEmployee(address employeeAddress) external;
+
+    /**
      * @dev This function is used to get an employee
      */
     function getEmployee(
@@ -55,11 +60,16 @@ interface ICaos {
     function addRate(string memory position, uint256 rate) external;
 
     /**
+     * @dev This function is used to get the rate for a position
+     */
+    function getRate(string memory position) external view returns (uint256);
+
+    /**
      * @dev This function is used to calculate the payment amount for an employee
      */
     function calculatePayment(
         Employee memory employee
-    ) external view returns (uint256);
+    ) internal view returns (uint256);
 }
 
 struct Employee {
