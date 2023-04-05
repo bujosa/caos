@@ -16,9 +16,6 @@ contract CaosTest is Test {
 
         employee1 = address(0x123);
 
-        uint256 amount = 10000000000000000000000 ether;
-        payable(address(this)).send(amount);
-
         caos.addRate("Manager", 30);
         caos.registerEmployee(
             "John Doe",
@@ -111,5 +108,16 @@ contract CaosTest is Test {
         caos.processPayment(employee1);
         uint payment = caos.getPayment(employee1);
         assertEq(payment, 3000);
+    }
+
+    function testExpectRevertGetPayment() public {
+        address expectedAddress = address(0x1234);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Errors.InvalidEmployee.selector,
+                expectedAddress
+            )
+        );
+        caos.getPayment(expectedAddress);
     }
 }
