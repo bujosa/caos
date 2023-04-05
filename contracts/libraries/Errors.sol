@@ -3,6 +3,11 @@ pragma solidity ^0.8.17;
 
 library Errors {
     /**
+     * @dev Thrown when a employee already exists.
+     */
+    error EmployeeAlreadyExist(address);
+
+    /**
      * @dev Thrown when a function receives an invalid employee as input.
      */
     error InvalidEmployee(address);
