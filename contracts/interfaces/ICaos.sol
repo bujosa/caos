@@ -69,7 +69,7 @@ interface ICaos {
      */
     function calculatePayment(
         Employee memory employee
-    ) internal view returns (uint256);
+    ) external view returns (uint256);
 }
 
 struct Employee {
