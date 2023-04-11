@@ -29,3 +29,27 @@ The contract also maintains an array of payment transactions made to employees, 
 # Conclusion
 
 Caos provides an efficient and secure solution for managing employee information, tracking hours worked, calculating payments, and processing them. Its smart contract design ensures the privacy and security of employee data while providing a reliable and accurate payment system.
+
+# EIP2535 Diamond Standard
+
+### Contracts Required by EIP2535 (This section is copy from [EIP2535](https://eips.ethereum.org/EIPS/eip-2535))
+
+- [DiamondCutFacet](./contracts/diamond/facets/DiamondCutFacet.sol): Contract in charge of handling the update logic of the diamond.
+- [DiamondLoupeFacet](./contracts/diamond/facets/DiamondLoupeFacet.sol): Contract in charge of introspection. Allows to se the facet addresses and their functions.
+- [Diamond](./contracts/diamond/Diamond.sol): The proxy contract that handles the routing logic to send user requests to the correct facet if one is available.
+
+### Run the tests
+
+```bash
+forge test
+```
+
+### Run the script to deploy the diamond in a local network
+
+```bash
+anvil
+```
+
+```bash
+forge script scripts/Deploy.s.sol --fork-url http://localhost:8545/ --broadcast
+```
